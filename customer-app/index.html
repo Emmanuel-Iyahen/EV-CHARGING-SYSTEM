@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EV Charging - Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h2>EV Charging</h2>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="nav-item active">
+                    <a href="#" class="nav-link" data-page="dashboard">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-page="stations">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Stations</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-page="charging">
+                        <i class="fas fa-charging-station"></i>
+                        <span>Charging</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-page="profile">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Topbar -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <button class="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h3 id="pageTitle">Dashboard</h3>
+                </div>
+                <div class="topbar-right">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </button>
+
+
+                    <div class="user-menu">
+                        <div class="user-avatar" id="userAvatar">JD</div>
+                        <button class="logout-btn" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Dashboard Page -->
+                <div id="dashboardPage" class="page active">
+                    <div class="mb-8">
+                        <h1 id="welcomeMessage">Welcome back!</h1>
+                        <p class="text-gray-600">Monitor your charging sessions and find available stations.</p>
+                    </div>
+
+
+
+
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalStations">0</h3>
+                                <p>Total Stations</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="availableChargers">0</h3>
+                                <p>Available Chargers</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-charging-station"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="activeSessions">0</h3>
+                                <p>Active Sessions</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-container">
+                        <!-- Active Charging Session -->
+                        <div class="grid-item">
+                            <h2 class="section-title">Current Charging Session</h2>
+                            <div id="activeSession" class="charging-session">
+                                <div class="text-center py-8">
+                                    <i class="fas fa-exclamation-circle text-4xl text-gray-400 mb-4"></i>
+                                    <h3 class="text-lg font-medium text-gray-900 mb-2">No Active Session</h3>
+                                    <p class="text-gray-600 mb-4">You don't have any active charging sessions.</p>
+                                    <a href="#" class="btn btn-primary" onclick="showPage('stations')">
+                                        <i class="fas fa-bolt mr-2"></i>
+                                        Find a Station
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nearby Stations -->
+                        <div class="grid-item">
+                            <h2 class="section-title">Available Stations</h2>
+                            <div id="nearbyStations" class="stations-grid">
+                                <!-- Stations will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stations Page -->
+                <div id="stationsPage" class="page">
+                    <div class="mb-8">
+                        <h1>Charging Stations</h1>
+                        <p class="text-gray-600">Find and select from available charging stations</p>
+                    </div>
+
+                    <!-- Search and Filter -->
+                    <div class="filters">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="stationSearch" placeholder="Search stations by name or location...">
+                        </div>
+                        <select id="stationFilter">
+                            <option value="all">All Stations</option>
+                            <option value="available">Available Only</option>
+                            <option value="unavailable">Unavailable</option>
+                        </select>
+                    </div>
+
+                    <!-- Stations Grid -->
+                    <div id="stationsGrid" class="stations-grid">
+                        <!-- Stations will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Charging Page -->
+                <div id="chargingPage" class="page">
+                    <div class="mb-8">
+                        <h1>Charging Sessions</h1>
+                        <p class="text-gray-600">Monitor and manage your charging sessions</p>
+                    </div>
+
+                    <!-- Active Session -->
+                    <!-- <div class="mb-12">
+                        <h2 class="section-title">Active Session</h2>
+                        <div id="chargingActiveSession" class="charging-session">
+                            <div class="text-center py-8">
+                                <i class="fas fa-battery-quarter text-4xl text-gray-400 mb-4"></i>
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">No Active Session</h3>
+                                <p class="text-gray-600 mb-4">You don't have any active charging sessions.</p>
+                                <a href="#" class="btn btn-primary" onclick="showPage('stations')">
+                                    <i class="fas fa-bolt mr-2"></i>
+                                    Find a Station
+                                </a>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <!-- Session History -->
+                    <div>
+                        <h2 class="section-title">Session History</h2>
+                        <div id="sessionHistory" class="charging-session">
+                            <div class="text-center py-8">
+                                <i class="fas fa-history text-4xl text-gray-400 mb-4"></i>
+                                <h3 class="text-lg font-medium text-gray-900 mb-2">No Session History</h3>
+                                <p class="text-gray-600">Your past charging sessions will appear here.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Page -->
+                <div id="profilePage" class="page">
+                    <div class="mb-8">
+                        <h1>Profile Settings</h1>
+                        <p class="text-gray-600">Manage your account information and preferences</p>
+                    </div>
+
+                    <div class="charging-session">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="profileName">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="profileEmail">
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="profilePhone">
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn btn-secondary">Cancel</button>
+                            <button class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

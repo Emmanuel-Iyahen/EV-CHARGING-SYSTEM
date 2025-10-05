@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Debug</title>
+    <style>
+        body { font-family: Arial; margin: 20px; }
+        #log { background: #f0f0f0; padding: 15px; height: 400px; overflow-y: scroll; font-family: monospace; }
+        .success { color: green; }
+        .error { color: red; }
+        button { margin: 5px; padding: 10px; cursor: pointer; }
+        .container { display: flex; gap: 20px; }
+        .panel { flex: 1; }
+    </style>
+</head>
+<body>
+    <h1>WebSocket Connection Test</h1>
+    
+    <div class="container">
+        <div class="panel">
+            <h3>Test Connections:</h3>
+            <button onclick="testConnection('ws://localhost:8000/ws/simple-test')">Test Simple WS</button>
+            <button onclick="testConnection('ws://localhost:8000/charging/ws/charging-updates')">Test Charging WS</button>
+            <button onclick="clearLog()">Clear Log</button>
+            <br><br>
+            <button onclick="sendMessage()" id="sendBtn" disabled>Send Test Message</button>
+            <input type="text" id="messageInput" placeholder="Enter message" disabled>
+        </div>
+        
+        <div class="panel">
+            <h3>Connection Log:</h3>
+            <div id="log"></div>
+        </div>
+    </div>
+
+    <script>
+        let socket = null;
+        const logElement = document.getElementById('log');
+        const sendBtn = document.getElementById('sendBtn');
+        const messageInput = document.getElementById('messageInput');
+        
+        function log(msg, type = 'info') {
+            const entry = document.createElement('div');
+            entry.className = type;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+            logElement.appendChild(entry);
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(`[${type}] ${msg}`);
+        }
+        
+        function testConnection(url) {
+            // Close existing connection
+            if (socket) {
+                socket.close();
+                socket = null;
+            }
+            
+            log(`🔄 Connecting to: ${url}`);
+            
+            try {
+                socket = new WebSocket(url);
+                
+                socket.onopen = function(event) {
+                    log(`✅ CONNECTED to ${url}`, 'success');
+                    sendBtn.disabled = false;
+                    messageInput.disabled = false;
+                    messageInput.focus();
+                };
+                
+                socket.onmessage = function(event) {
+                    log(`📩 RECEIVED: ${event.data}`, 'success');
+                };
+                
+                socket.onclose = function(event) {
+                    log(`❌ DISCONNECTED: Code ${event.code} - ${getCloseReason(event.code)}`, 'error');
+                    sendBtn.disabled = true;
+                    messageInput.disabled = true;
+                    socket = null;
+                };
+                
+                socket.onerror = function(event) {
+                    log(`💥 CONNECTION ERROR`, 'error');
+                    sendBtn.disabled = true;
+                    messageInput.disabled = true;
+                };
+                
+            } catch (error) {
+                log(`💥 Failed to create WebSocket: ${error.message}`, 'error');
+            }
+        }
+        
+        function sendMessage() {
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                const message = messageInput.value || "Test message " + new Date().toLocaleTimeString();
+                socket.send(message);
+                log(`📤 SENT: ${message}`);
+                messageInput.value = '';
+            } else {
+                log('❌ Not connected', 'error');
+            }
+        }
+        
+        function getCloseReason(code) {
+            const reasons = {
+                1000: "Normal closure",
+                1001: "Going away", 
+                1002: "Protocol error",
+                1003: "Unsupported data",
+                1006: "Abnormal closure (no response)",
+                1008: "Policy violation",
+                1009: "Message too big",
+                1011: "Internal error",
+                1012: "Service restart",
+                1013: "Try again later", 
+                1014: "Bad gateway",
+                1015: "TLS handshake failed"
+            };
+            return reasons[code] || "Unknown reason";
+        }
+        
+        function clearLog() {
+            logElement.innerHTML = '';
+        }
+        
+        // Allow Enter key to send messages
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // Auto-test simple connection
+        setTimeout(() => {
+            log("🔍 Auto-testing simple WebSocket...");
+            testConnection('ws://localhost:8000/ws/test');
+        }, 1000);
+    </script>
+</body>
+</html>
