@@ -81,21 +81,104 @@ function formatDate(dateString) {
     return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 }
 
+
+//////////////here for count down timer ////////////////
+
+// Simple countdown timer for active sessions
+let sessionTimer = null;
+
+function startSessionTimer(startTime) {
+    // Clear any existing timer
+    if (sessionTimer) {
+        clearInterval(sessionTimer);
+    }
+    
+    const timerElement = document.getElementById('sessionTimer');
+    if (!timerElement) return;
+    
+    function updateTimer() {
+        const now = new Date();
+        const start = new Date(startTime);
+        const diffMs = now - start;
+        
+        const hours = Math.floor(diffMs / (1000 * 60 * 60));
+        const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+        
+        const formattedTime = 
+            String(hours).padStart(2, '0') + ':' +
+            String(minutes).padStart(2, '0') + ':' +
+            String(seconds).padStart(2, '0');
+        
+        timerElement.textContent = formattedTime;
+    }
+    
+    // Update immediately and then every second
+    updateTimer();
+    sessionTimer = setInterval(updateTimer, 1000);
+}
+
+function stopSessionTimer() {
+    if (sessionTimer) {
+        clearInterval(sessionTimer);
+        sessionTimer = null;
+    }
+}
+
+
+
+
+
+// Function to format duration
+// function formatDuration(startTime, endTime) {
+//     if (!endTime) return 'In progress';
+    
+//     const start = new Date(startTime);
+//     const end = new Date(endTime);
+//     const durationMs = end - start;
+    
+//     const hours = Math.floor(durationMs / (1000 * 60 * 60));
+//     const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
+    
+//     if (hours > 0) {
+//         return `${hours}h ${minutes}m`;
+//     }
+//     return `${minutes}m`;
+// }
+
+
 // Function to format duration
 function formatDuration(startTime, endTime) {
-    if (!endTime) return 'In progress';
+    if (!startTime) return 'In progress';
+
+    console.log(startTime, endTime)
     
-    const start = new Date(startTime);
-    const end = new Date(endTime);
-    const durationMs = end - start;
-    
-    const hours = Math.floor(durationMs / (1000 * 60 * 60));
-    const minutes = Math.floor((durationMs % (1000 * 60 * 60)) / (1000 * 60));
-    
-    if (hours > 0) {
-        return `${hours}h ${minutes}m`;
+    try {
+        // Parse dates and use absolute value to handle timezone issues
+        const start = new Date(startTime);
+        const end = endTime ? new Date(endTime) : new Date();
+        
+        if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+            return 'Invalid time';
+        }
+        
+        // Use absolute value to handle any timezone discrepancies
+        const durationMs = Math.abs(end - start);
+        
+        const minutes = Math.floor(durationMs / (1000 * 60));
+        const hours = Math.floor(minutes / 60);
+        
+        if (hours > 0) {
+            const remainingMinutes = minutes % 60;
+            return `${hours}h ${remainingMinutes}m`;
+        }
+        
+        return `${minutes}m`;
+        
+    } catch (error) {
+        console.error('Error calculating duration:', error);
+        return 'Error';
     }
-    return `${minutes}m`;
 }
 
 // Function to populate session history
@@ -133,6 +216,8 @@ async function populateSessionHistory() {
             const status = isActive ? 'Active' : 'Completed';
             const statusClass = isActive ? 'status-active' : 'status-completed';
             const duration = formatDuration(session.start_time, session.end_time);
+
+            console.log(session.start_time, session.end_time)
             
             const energy = session.energy_consumed_kwh 
                 ? `${session.energy_consumed_kwh.toFixed(2)} kWh`
@@ -391,6 +476,15 @@ function updateActiveSessionDisplay(session) {
                 Stop Charging
             </button>
         </div>
+
+
+        <div class="session-stats">
+            <div class="session-stat">
+                <span class="session-stat-value" id="sessionTimer">00:00:00</span>
+                <span class="session-stat-label">Time Charging</span>
+            </div>
+
+
         <div class="session-stats">
             <div class="session-stat">
                 <span class="session-stat-value">${duration}</span>
@@ -410,6 +504,7 @@ function updateActiveSessionDisplay(session) {
             </div>
         </div>
     `;
+    startSessionTimer(session.start_time);
 }
 
 function updateChargingSessionDisplay(session) {
@@ -511,6 +606,7 @@ async function stopCharging(sessionId) {
             }
             
             alert('Charging stopped successfully');
+            stopSessionTimer();
             window.location.reload();
         }
     } catch (error) {

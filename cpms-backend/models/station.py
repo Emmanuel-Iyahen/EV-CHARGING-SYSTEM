@@ -38,7 +38,7 @@ class ChargePoint(Base):
     # OCPP-specific fields
     ocpp_charge_point_id = Column(String(255), unique=True, nullable=True)  # OCPP ChargeBox ID
     ocpp_version = Column(String(10), default="1.6")  # 1.6 or 2.0.1
-    ocpp_connected = Column(Boolean, default=False)
+    ocpp_connected = Column(Boolean, default=False, nullable=True)
     vendor = Column(String(100), nullable=True)
     model = Column(String(100), nullable=True)
     serial_number = Column(String(100), nullable=True)

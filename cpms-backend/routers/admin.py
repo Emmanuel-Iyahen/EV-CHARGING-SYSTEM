@@ -137,5 +137,6 @@ def get_all_charging_sessions(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_admin_user)
 ):
-    sessions = db.query(ChargingSession).offset(skip).limit(limit).all()
+    #sessions = db.query(ChargingSession).offset(skip).limit(limit).all()
+    sessions = db.query(ChargingSession).order_by(ChargingSession.end_time.desc()).all()
     return sessions

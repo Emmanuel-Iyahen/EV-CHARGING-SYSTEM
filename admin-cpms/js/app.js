@@ -1768,34 +1768,143 @@ function displaySessionsTable(sessions) {
     }).join('');
 }
 
+
+
+
+// ===== CORRECTED DURATION CALCULATION FUNCTIONS =====
+
 function calculateSessionDuration(session) {
     if (!session.start_time) return '0m';
     
-    const startTime = new Date(session.start_time);
-    const endTime = session.end_time ? new Date(session.end_time) : new Date();
-    const diffMs = endTime - startTime;
-    const diffMins = Math.floor(diffMs / 60000);
-    
-    if (diffMins < 60) {
-        return `${diffMins}m`;
-    } else {
-        const hours = Math.floor(diffMins / 60);
-        const mins = diffMins % 60;
-        return `${hours}h ${mins}m`;
+    try {
+        const startTime = new Date(session.start_time);
+        let endTime;
+        
+        if (session.end_time) {
+            endTime = new Date(session.end_time);
+        } else {
+            endTime = new Date(); // Current time for active sessions
+        }
+        
+        // Validate dates
+        if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
+            return 'Invalid time';
+        }
+        
+        let durationMs = endTime - startTime;
+        
+        // Handle timezone issues - if end time appears to be before start time
+        if (durationMs < 0) {
+            console.warn('Negative duration detected, applying timezone correction');
+            // Add 1 hour to fix the timezone discrepancy
+            durationMs = durationMs + (60 * 60 * 1000);
+        }
+        
+        // Use absolute value to ensure positive duration
+        const absoluteMs = Math.abs(durationMs);
+        
+        return formatDurationFromMs(absoluteMs);
+        
+    } catch (error) {
+        console.error('Error calculating session duration:', error);
+        return 'Error';
     }
 }
 
-function formatTimeAgo(timestamp) {
-    const time = new Date(timestamp);
-    const now = new Date();
-    const diffMs = now - time;
-    const diffMins = Math.floor(diffMs / 60000);
+function formatDurationFromMs(durationMs) {
+    const seconds = Math.floor(durationMs / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
     
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
-    return `${Math.floor(diffMins / 1440)}d ago`;
+    if (days > 0) {
+        const remainingHours = hours % 24;
+        return `${days}d ${remainingHours}h`;
+    }
+    
+    if (hours > 0) {
+        const remainingMinutes = minutes % 60;
+        return `${hours}h ${remainingMinutes}m`;
+    }
+    
+    if (minutes > 0) {
+        return `${minutes}m`;
+    }
+    
+    return `${seconds}s`;
 }
+
+// Enhanced formatTimeAgo function
+function formatTimeAgo(timestamp) {
+    if (!timestamp) return 'Unknown';
+    
+    try {
+        const time = new Date(timestamp);
+        const now = new Date();
+        
+        if (isNaN(time.getTime())) {
+            return 'Invalid time';
+        }
+        
+        let diffMs = now - time;
+        
+        // Handle timezone issues
+        if (diffMs < 0) {
+            console.warn('Negative time difference detected, applying correction');
+            diffMs = Math.abs(diffMs);
+        }
+        
+        const diffSeconds = Math.floor(diffMs / 1000);
+        const diffMinutes = Math.floor(diffSeconds / 60);
+        const diffHours = Math.floor(diffMinutes / 60);
+        const diffDays = Math.floor(diffHours / 24);
+        
+        if (diffSeconds < 60) return 'Just now';
+        if (diffMinutes < 60) return `${diffMinutes}m ago`;
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffDays < 7) return `${diffDays}d ago`;
+        
+        return time.toLocaleDateString();
+        
+    } catch (error) {
+        console.error('Error formatting time ago:', error);
+        return 'Error';
+    }
+}
+
+
+// function calculateSessionDuration(session) {
+//     if (!session.start_time) return '0m';
+    
+//     const startTime = new Date(session.start_time);
+//     const endTime = session.end_time ? new Date(session.end_time) : new Date();
+
+//     const diffMs = endTime - startTime;
+//     const diffMins = Math.floor(diffMs / 60000);
+    
+//     if (diffMins < 60) {
+//         return `${diffMins}m`;
+//     } else {
+//         const hours = Math.floor(diffMins / 60);
+//         const mins = diffMins % 60;
+//         return `${hours}h ${mins}m`;
+//     }
+// }
+
+// function formatTimeAgo(timestamp) {
+//     const time = new Date(timestamp);
+//     const now = new Date();
+//     const diffMs = now - time;
+//     const diffMins = Math.floor(diffMs / 60000);
+    
+//     if (diffMins < 1) return 'Just now';
+//     if (diffMins < 60) return `${diffMins}m ago`;
+//     if (diffMins < 1440) return `${Math.floor(diffMins / 60)}h ago`;
+//     return `${Math.floor(diffMins / 1440)}d ago`;
+// }
+
+
+
 
 function getUserName(userId) {
     // You can implement user name lookup here

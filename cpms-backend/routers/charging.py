@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisco
 from sqlalchemy.orm import Session
 from datetime import datetime
 import json
+from sqlalchemy import func
 import asyncio
 import logging
 from services import ocpp_service
@@ -158,8 +159,9 @@ def stop_charging(
     
     # Update session
     session.is_active = False
-    session.end_time = datetime.utcnow()
-    
+    #session.end_time = datetime.utcnow()
+
+    session.end_time = func.now()
     # Update charge point status
     charge_point = db.query(ChargePoint).filter(ChargePoint.id == session.charge_point_id).first()
     if charge_point:
