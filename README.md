@@ -1,12 +1,18 @@
-# 🎬 Media Processing System
+# EV Charging System ⚡
 
 
-![mediaprocessor Demo](https://resi.io/wp-content/uploads/2022/05/what-is-a-video-compressor-resi.jpeg)
+![mediaprocessor Demo](evcharging.jpg)
 
 
 
 # Overview
-This project is a scalable, serverless media processing system built with Django, React, and AWS Lambda for efficient image and video compression.it provides a complete solution for uploading, processing, and downloading media files with automatic compression. The system uses a serverless architecture with AWS Lambda for processing, making it highly scalable and cost-effective.
+
+
+A full-stack, production-ready EV Charging System featuring a customer-facing application, an admin portal, and a robust Central Management System (CPMS) backend compliant with OCPP.
+
+**Live Demo:** [Customer App](https://your-customer-app.vercel.app) | [Admin Portal](https://your-admin-app.vercel.app)  
+**Backend API:** [https://your-api.onrender.com](https://your-api.onrender.com)
+
 
 # Features
 📂 Direct Uploads: Secure presigned URLs for direct S3 uploads
@@ -22,7 +28,7 @@ This project is a scalable, serverless media processing system built with Django
 🏗️ Infrastructure as Code: Terraform and CloudFormation for easy deployment
 
 # ARCHITECTURE
-![architecture Demo](lamdaCompress.jpeg)
+![architecture Demo](evchargingSystemDesign.png)
 
 # PROJECT STRUCTURE
     media-processing-system/  
