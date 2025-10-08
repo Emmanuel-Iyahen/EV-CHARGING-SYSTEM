@@ -18,6 +18,14 @@ from services.websocket import websocket_manager
 
 
 
+async def create_tables():
+    async with engine.begin() as conn:
+        # This will create all tables defined in Base subclasses (User, etc.)
+        await conn.run_sync(Base.metadata.create_all)
+    print("Tables created successfully!")
+
+
+
 
 
 async def start_ocpp_server():

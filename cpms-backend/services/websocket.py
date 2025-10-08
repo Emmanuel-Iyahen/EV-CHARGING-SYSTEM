@@ -1,64 +1,3 @@
-# import json
-# import asyncio
-# import redis.asyncio as redis
-# from fastapi import WebSocket
-# from typing import Dict, List
-# import os
-
-# REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
-
-# class WebSocketManager:
-#     def __init__(self):
-#         self.active_connections: Dict[str, List[WebSocket]] = {}
-#         self.redis_client = None
-
-#     async def connect_redis(self):
-#         self.redis_client = redis.from_url(REDIS_URL, decode_responses=True)
-#         await self.redis_client.ping()
-
-#     async def connect(self, websocket: WebSocket, client_id: str, channel: str):
-#         await websocket.accept()
-#         if channel not in self.active_connections:
-#             self.active_connections[channel] = []
-#         self.active_connections[channel].append(websocket)
-
-#     def disconnect(self, websocket: WebSocket, channel: str):
-#         if channel in self.active_connections:
-#             self.active_connections[channel].remove(websocket)
-
-#     async def send_personal_message(self, message: str, websocket: WebSocket):
-#         await websocket.send_text(message)
-
-#     async def broadcast(self, channel: str, message: str):
-#         if channel in self.active_connections:
-#             disconnected = []
-#             for connection in self.active_connections[channel]:
-#                 try:
-#                     await connection.send_text(message)
-#                 except Exception:
-#                     disconnected.append(connection)
-            
-#             for connection in disconnected:
-#                 self.active_connections[channel].remove(connection)
-
-#     async def listen_redis_channel(self, channel: str):
-#         if not self.redis_client:
-#             await self.connect_redis()
-        
-#         pubsub = self.redis_client.pubsub()
-#         await pubsub.subscribe(channel)
-        
-#         async for message in pubsub.listen():
-#             if message['type'] == 'message':
-#                 await self.broadcast(channel, message['data'])
-
-# # Global WebSocket manager
-# websocket_manager = WebSocketManager()
-
-
-
-
-
 
 import json
 import asyncio
@@ -68,7 +7,7 @@ from typing import Dict, List
 import os
 from datetime import datetime
 
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
+REDIS_URL = os.getenv("REDIS_URL")
 
 class WebSocketManager:
     def __init__(self):

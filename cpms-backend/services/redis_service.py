@@ -3,7 +3,7 @@ import json
 import os
 from typing import Optional, Dict, Any
 
-REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
+REDIS_URL = os.getenv("REDIS_URL")
 
 class RedisService:
     def __init__(self):

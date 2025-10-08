@@ -10,7 +10,7 @@
 
 A full-stack, production-ready EV Charging System featuring a customer-facing application, an admin portal, and a robust Central Management System (CPMS) backend compliant with OCPP.
 
-**Live Demo:** [Customer App](https://your-customer-app.vercel.app) | [Admin Portal](https://your-admin-app.vercel.app)  
+**Live Demo:** [Customer App](https://ev-charging-frontend-seven.vercel.app) | [Admin Portal](https://your-admin-app.vercel.app)  
 **Backend API:** [https://your-api.onrender.com](https://your-api.onrender.com)
 
 
