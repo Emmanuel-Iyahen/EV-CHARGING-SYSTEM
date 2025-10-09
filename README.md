@@ -1,7 +1,7 @@
 # EV Charging System ⚡
 
 
-![mediaprocessor Demo](evcharging.jpg)
+![EVcharging System](bp-pulse-car.avif)
 
 
 
