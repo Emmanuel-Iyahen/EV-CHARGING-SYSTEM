@@ -30,46 +30,31 @@ This project addresses these issues by implementing a cloud-native, event-driven
 # ARCHITECTURE
 ![architecture Demo](evchargingSystemDesign.png)
 
+### FastAPI Backend (CPMS)
 
-# PROJECT STRUCTURE
-    media-processing-system/  
-    ├── backend/           
-    │   ├── media_processing/   
-    │   │   ├── models.py  
-    │   │   ├── serializers.py   
-    │   │   ├── views.py   
-    │   │   ├── tasks.py   
-    │   │   └── utils.py  
-    │   ├── config/  
-    │   │   ├── settings.py  
-    │   │   └── urls.py  
-    │   └── manage.py  
-    ├── lambda-functions/           
-    │   ├── image-compressor/  
-    │   │   ├── app.py  
-    │   │   ├── requirements.txt  
-    │   │   └── Dockerfile  
-    │   ├── video-compressor/  
-    │   │   ├── app.py  
-    │   │   ├── requirements.txt  
-    │   │   └── Dockerfile  
-    │   └── shared/       
-    │       └── s3_utils.py  
-    ├── infrastructure/       
-    │   ├── terraform/  
-    │   │   ├── main.tf   
-    │   │   ├── variables.tf   
-    │   │   └── outputs.tf  
-    │   └── cloudformation/   
-    │       └── media-processing-stack.yaml   
-    ├── frontend/         
-    │   ├── src/  
-    │   │   ├── components/   
-    │   │   │   └── MediaUploader.js     
-    │   │   └── services/    
-    │   │       └── api.js  
-    │   └── package.json  
-    └── README.md
+- Implements OCPP 2.0.0 to simulate communication between charge points and the backend.
+
+- Provides REST APIs for admin and customer apps.
+
+- Uses WebSockets for live session updates.
+
+- Integrates Redis for pub/sub events and performance caching.
+
+- Persists data with PostgreSQL.
+
+### Frontend Apps (Customer & Admin)
+
+- Customer App: Enables users to locate charge points, start, monitor, and stop charging sessions.
+
+- Admin App: Allows operators to view usage stats, manage charge points, monitor active sessions, and control pricing.
+
+### Deployment
+
+- Frontend: Deployed on Vercel for global scalability and CDN delivery.
+
+- Backend: Deployed on Render, integrated with managed PostgreSQL and Redis services.
+
+
 
 # Quick Start
 ## Prerequisites
