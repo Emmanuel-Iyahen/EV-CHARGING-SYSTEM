@@ -28,7 +28,7 @@ This project addresses these issues by implementing a cloud-native, event-driven
 
 
 # ARCHITECTURE
-![architecture Demo](evchargingSystemDesign.png)
+![architecture Demo](systemDesign.png)
 
 ### FastAPI Backend (CPMS)
 
