@@ -56,21 +56,16 @@ This project addresses these issues by implementing a cloud-native, event-driven
 
 
 
-# Quick Start
-## Prerequisites
-
-    Python 3.8+
-
-    Node.js 14+
-
-    AWS Account
-
-    Terraform 1.0+ (optional)
-
-    Docker (for Lambda deployment)
-
-# Installation
+# Installation (Lecal environment)
 ## 1. Clone the repository
-    git clone https://github.com/your-username/media-processing-system.git
-    cd media-processing-system
+    git https://github.com/Emmanuel-Iyahen/EV-CHARGING-SYSTEM.git
+    cd cpms-backend
 
+## 1. Create virtual environment
+    virtualenv venv
+
+## 1. install dependencies  
+    pip install -r requirements.txt
+
+## 1. Run application
+    pip install -r requirements.txt
