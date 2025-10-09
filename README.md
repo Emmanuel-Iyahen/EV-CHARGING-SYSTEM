@@ -24,8 +24,8 @@ This project addresses those issues by building a cloud-native, event-driven, an
 
 
 
-**Live Demo:** [Customer App](https://ev-charging-frontend-seven.vercel.app) | [Admin Portal](https://your-admin-app.vercel.app)  
-**Backend API:** [https://your-api.onrender.com](https://your-api.onrender.com)
+**Live Demo:** [Customer App](https://ev-charging-frontend-seven.vercel.app) | [Admin Portal](https://ev-charging-frontend-ss5m.vercel.app/)  
+
 
 # ARCHITECTURE
 ![architecture Demo](evchargingSystemDesign.png)
