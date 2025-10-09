@@ -1,34 +1,35 @@
-# EV Charging System ⚡
+# EV Charging Management System (CPMS) ⚡
 
 
 ![EVcharging System](bp-pulse-car.avif)
+Customer App | Admin Dashboard | Cloud-Deployed CPMS Backend
+
+# 🧩 Overview
+
+This is a cloud-deployed, scalable Electric Vehicle (EV) Charging Platform built to simulate real-world charging operations using the Open Charge Point Protocol (OCPP 2.0.0).
+The system enables EV drivers to locate charge points, start, monitor, and stop charging sessions, while allowing operators to manage charge points, users, and infrastructure. The system is powered by a Charge Point Management System (CPMS) backend that leverages PostgreSQL for persistence, Redis for caching and pub/sub messaging, and WebSockets for real-time charge session updates and event-driven communication.
+
+## 🚗 Problem Statement
+
+The rapid growth of electric vehicles in the UK demands robust and scalable systems to manage EV charging infrastructure.
+Existing systems often face challenges like:
+
+- Poor scalability under high user load
+- Slow response times for real-time operations (e.g., start/stop sessions)
+- Inefficient charge point communication and monitoring
+- Difficulty synchronizing customer and admin activities
+
+---
+This project addresses those issues by building a cloud-native, event-driven, and protocol-compliant CPMS that supports real-time user interaction, operator management, and data-driven scalability.
 
 
-
-# Overview
-
-
-A full-stack, production-ready EV Charging System featuring a customer-facing application, an admin portal, and a robust Central Management System (CPMS) backend compliant with OCPP.
 
 **Live Demo:** [Customer App](https://ev-charging-frontend-seven.vercel.app) | [Admin Portal](https://your-admin-app.vercel.app)  
 **Backend API:** [https://your-api.onrender.com](https://your-api.onrender.com)
 
-
-# Features
-📂 Direct Uploads: Secure presigned URLs for direct S3 uploads
-
-🗜️ Automatic Compression: Intelligent image and video compression
-
-⚡ Scalable Architecture: Serverless design using AWS Lambda
-
-📊 Real-time Status: Track processing status from upload to completion
-
-💻 Responsive UI: React-based frontend for seamless user experience
-
-🏗️ Infrastructure as Code: Terraform and CloudFormation for easy deployment
-
 # ARCHITECTURE
 ![architecture Demo](evchargingSystemDesign.png)
+
 
 # PROJECT STRUCTURE
     media-processing-system/  
