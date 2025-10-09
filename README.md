@@ -20,7 +20,7 @@ Existing systems often face challenges like:
 - Difficulty synchronizing customer and admin activities
 
 ---
-This project addresses those issues by building a cloud-native, event-driven, and protocol-compliant CPMS that supports real-time user interaction, operator management, and data-driven scalability.
+This project addresses these issues by implementing a cloud-native, event-driven, and protocol-compliant CPMS that supports real-time user interaction, operator management, and data-driven scalability.
 
 
 
