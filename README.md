@@ -63,9 +63,10 @@ This project addresses these issues by implementing a cloud-native, event-driven
 
 ## 1. Create virtual environment
     virtualenv venv
+    source venv/bin/activate
 
 ## 1. install dependencies  
     pip install -r requirements.txt
 
 ## 1. Run application
-    pip install -r requirements.txt
+    uvicorn main:app --reload

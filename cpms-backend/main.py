@@ -18,12 +18,22 @@ from services.websocket import websocket_manager
 
 
 
-async def create_tables():
-    async with engine.begin() as conn:
-        # This will create all tables defined in Base subclasses (User, etc.)
-        await conn.run_sync(Base.metadata.create_all)
-    print("Tables created successfully!")
+# async def create_tables():
+#     async with engine.begin() as conn:
+#         # This will create all tables defined in Base subclasses (User, etc.)
+#         await conn.run_sync(Base.metadata.create_all)
+#     print("Tables created successfully!")
 
+
+
+def create_tables():
+    try:
+        with engine.begin() as conn:
+            Base.metadata.create_all(bind=conn)
+        logger.info("✅ Database tables created/verified (sync)")
+    except Exception as e:
+        logger.error(f"❌ Sync table creation failed: {e}")
+        raise
 
 
 
@@ -54,7 +64,15 @@ async def start_ocpp_server():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+
     # Startup
+
+    try:
+        create_tables()
+        logger.info("✅ Database tables created / verified")
+    except Exception as e:
+        logger.error(f"❌ Database table creation failed: {e}")
+
     try:
         await websocket_manager.connect_redis()
         asyncio.create_task(websocket_manager.listen_redis_channel("charging_updates"))
@@ -78,9 +96,17 @@ app = FastAPI(
 )
 
 # CORS middleware
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["null"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
