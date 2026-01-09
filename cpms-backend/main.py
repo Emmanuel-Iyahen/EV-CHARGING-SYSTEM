@@ -94,7 +94,13 @@ try:
     app.include_router(stations.router)
     app.include_router(charging.router)
     app.include_router(admin.router)
-    logger.info("✅ All routers loaded")
+
+    # app.include_router(auth.router, prefix="/auth", tags=["Auth"])
+    # app.include_router(users.router, prefix="/users", tags=["Users"])
+    # app.include_router(stations.router, prefix="/stations", tags=["Stations"])
+    # app.include_router(charging.router, prefix="/charging", tags=["Charging"])
+    # app.include_router(admin.router, prefix="/admin", tags=["Admin"])
+    # logger.info("✅ All routers loaded")
 except Exception as e:
     logger.error(f"❌ Router loading failed: {e}")
 
