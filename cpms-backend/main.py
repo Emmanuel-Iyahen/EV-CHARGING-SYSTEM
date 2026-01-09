@@ -109,7 +109,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://customer-app.smartprojects.dev"
+        "https://customer-app.smartprojects.dev", "https://cpms-admin.smartprojects.dev",
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
