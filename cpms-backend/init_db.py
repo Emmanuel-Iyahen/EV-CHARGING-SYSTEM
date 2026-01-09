@@ -4,8 +4,14 @@ from models.user import User
 from models.station import ChargingStation, ChargePoint
 from utils.security import get_password_hash
 
+from dotenv import load_dotenv
+load_dotenv()
+import os
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
 def init_database():
-    engine = create_engine("postgresql://townbox:fame007dav@localhost/ev_charging")
+    engine = create_engine(DATABASE_URL)
     Base.metadata.create_all(bind=engine)
     
     from sqlalchemy.orm import sessionmaker

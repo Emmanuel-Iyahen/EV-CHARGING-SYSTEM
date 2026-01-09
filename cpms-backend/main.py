@@ -9,6 +9,8 @@ from contextlib import asynccontextmanager
 from aiohttp import web
 import logging
 
+from init_db import init_database
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -70,6 +72,7 @@ async def lifespan(app: FastAPI):
     try:
         create_tables()
         logger.info("✅ Database tables created / verified")
+        init_database() 
     except Exception as e:
         logger.error(f"❌ Database table creation failed: {e}")
 
